@@ -32,6 +32,8 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.body = pg.sprite.Group()
+        # b = Body(self)
+        # self.all_sprites.add(b)
         for row, tiles in enumerate(self.map_data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -39,11 +41,12 @@ class Game:
                 if tile == 'P':
                     self.player = Player(self, col, row)
 
-    def Createbody(self):
-        for hlines in (0,31) and vlines in (0,23):
-            if self.player.x == hlines * TILESIZE or self.player.y == vlines * TILESIZE :
-                Body(self, self.player.x, self.player.y)
-
+    # def Createbody(self):
+    #     for hlines in (0,31) and vlines in (0,23):
+    #         if self.player.x != hlines * TILESIZE or self.player.y != vlines * TILESIZE :
+    #             i = Body(self, self.player.x, self.player.y)
+    #             self.all_sprites.draw(i)
+    #             print(i)
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -61,6 +64,8 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        self.draw
+        # self.Createbody
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -71,6 +76,7 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.draw_grid()
+        # self.Body.draw(self.screen)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
 
