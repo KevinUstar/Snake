@@ -32,8 +32,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.body = pg.sprite.Group()
-        # b = Body(self)
-        # self.all_sprites.add(b)
+        Body(self,10,10)
         for row, tiles in enumerate(self.map_data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -48,6 +47,11 @@ class Game:
     #             self.all_sprites.draw(i)
     #             print(i)
 
+    # if player hits wall or a body segment, game over
+    # def crash(self):
+    #     hits = pg.sprite.spritecollide(self, self.walls, self.body, False)
+    #     if hits:
+    #         self.playing = False
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
@@ -64,7 +68,7 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
-        self.draw
+        # self.crash
         # self.Createbody
 
     def draw_grid(self):
