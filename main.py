@@ -1,8 +1,8 @@
 # © 2019 KidsCanCode LLC / All rights reserved.
 import pygame as pg
-
+import random
 import sys
-
+import time
 from os import path
 
 from settings import *
@@ -19,7 +19,7 @@ class Game:
         self.clock = pg.time.Clock()
         pg.key.set_repeat(500, 100)
         self.load_data()
-
+# loads map file and reads the file in lines
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
@@ -32,20 +32,13 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.body = pg.sprite.Group()
-        Body(self,10,10)
+        # create the walls and the player based on the map file
         for row, tiles in enumerate(self.map_data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
-
-    # def Createbody(self):
-    #     for hlines in (0,31) and vlines in (0,23):
-    #         if self.player.x != hlines * TILESIZE or self.player.y != vlines * TILESIZE :
-    #             i = Body(self, self.player.x, self.player.y)
-    #             self.all_sprites.draw(i)
-    #             print(i)
 
     # if player hits wall or a body segment, game over
     # def crash(self):
@@ -68,8 +61,7 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
-        # self.crash
-        # self.Createbody
+        # self.crash()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -80,7 +72,6 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.draw_grid()
-        # self.Body.draw(self.screen)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
 

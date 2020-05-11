@@ -1,7 +1,9 @@
 # © 2019 KidsCanCode LLC / All rights reserved.
+# import setting varibles and pygame
 import pygame as pg
 from settings import *
 
+# player class
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
@@ -13,7 +15,7 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE 
         self.y = y * TILESIZE
-       
+# velocity in one direction is always positive for one direction, so the snake is always moving 
     def get_keys(self):
         keys = pg.key.get_pressed()
         if keys[pg.K_a]:
@@ -28,6 +30,13 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_s]:
             self.vy = PLAYER_SPEED
             self.vx = 0
+#creates a body segment at player x and y each time space is pressed.
+        if keys[pg.K_SPACE]:
+            x = self.x/TILESIZE
+            y = self.y/TILESIZE
+            Body(self.game, x, y)
+            print(len(self.game.body))
+# if the player collides with a wall, the velocity of the side that collided is turned to 0. this way, you can slide up walls
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
@@ -47,7 +56,6 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
-                
 
     def update(self):
         self.get_keys()
@@ -59,7 +67,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         
         
-
+# create body of snake Class
 class Body(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.body
@@ -70,11 +78,8 @@ class Body(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-    # def update(self):
-        # self.x = Player.rect.x + 10
-        # self.y = Player.rect.y + 10
 
-
+# create wall Class
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
