@@ -2,6 +2,7 @@
 # import setting varibles and pygame
 import pygame as pg
 from settings import *
+import time
 
 # player class
 class Player(pg.sprite.Sprite):
@@ -15,6 +16,8 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE 
         self.y = y * TILESIZE
+        self.current = pg.time.get_ticks()
+        self.segment_legnth = 100
 # velocity in one direction is always positive for one direction, so the snake is always moving 
     def get_keys(self):
         keys = pg.key.get_pressed()
@@ -30,12 +33,19 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_s]:
             self.vy = PLAYER_SPEED
             self.vx = 0
-#creates a body segment at player x and y each time space is pressed.
-        if keys[pg.K_SPACE]:
-            x = self.x/TILESIZE
-            y = self.y/TILESIZE
-            Body(self.game, x, y)
-            print(len(self.game.body))
+
+#creates a body segment at player x and y eevery 1/4th second.
+    def createbody(self):
+        global BODYSEGMENT
+        if BODYSEGMENT < self.segment_legnth:
+            if pg.time.get_ticks() - self.current > 25 :
+                x = self.x/TILESIZE
+                y = self.y/TILESIZE
+                Body(self.game, x, y)
+                self.current = pg.time.get_ticks()
+                BODYSEGMENT += 1
+            
+
 # if the player collides with a wall, the velocity of the side that collided is turned to 0. this way, you can slide up walls
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -65,6 +75,7 @@ class Player(pg.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('x')
         self.collide_with_walls('y')
+        self.createbody()
         
         
 # create body of snake Class
@@ -78,6 +89,22 @@ class Body(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+        self.bodynum = len(self.game.body)
+# if the amount of body instacnes is 100, it deletes the first instacne of body by the number assigned to it.
+    def update(self):
+        global BODYSEGMENT
+        global BODYCOUNT
+        if BODYSEGMENT == 100:
+            if self.bodynum == BODYCOUNT:
+                self.kill()
+                BODYSEGMENT -= 1
+                BODYCOUNT += 1
+                # if BODYCOUNT > 100 :
+                #     BODYCOUNT = 100
+                # else:
+                #     BODYCOUNT += 1
+                print(BODYSEGMENT)
+        
 
 # create wall Class
 class Wall(pg.sprite.Sprite):

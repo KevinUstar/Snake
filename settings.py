@@ -22,3 +22,5 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 # Player settings
 PLAYER_SPEED = 15
 BODYSEGMENT = 0
+# body settings
+BODYCOUNT = 1
